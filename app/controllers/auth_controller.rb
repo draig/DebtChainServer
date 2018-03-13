@@ -27,7 +27,7 @@ class AuthController < ApplicationController
     )
 
     if !response.ok?
-      render json: {error: 'Verify Token Error'}, status: :internal_server_error and return
+      render json: { status: 'Error', error: 'Verify Token Error' }, status: :internal_server_error and return
     end
 =end
 
