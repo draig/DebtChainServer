@@ -9,16 +9,17 @@ class AuthController < ApplicationController
     )
 
     if !response.ok?
-      render json: {error: 'Error delivering code verification'}, status: :internal_server_error and return
+      render json: { status: 'Error', error: 'Error delivering code verification' }, status: :internal_server_error and return
     end
 
-    render json: response, status: :ok
+    render json: { status: 'Success' }, status: :ok
   end
 
   def verify_code
     params.require(:verification_code)
     @verification_code = params[:verification_code]
 
+=begin
     response = Authy::PhoneVerification.check(
         verification_code: @verification_code,
         country_code: @country_code,
@@ -28,10 +29,11 @@ class AuthController < ApplicationController
     if !response.ok?
       render json: {error: 'Verify Token Error'}, status: :internal_server_error and return
     end
+=end
 
     user = User.find_or_create_by phone: @phone
 
-    render json: user, status: :ok
+    render json: { user: user.dto, auth_token: JsonWebToken.encode(user_id: user.id) }, status: :ok
   end
 
   private
