@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'sync/sync'
+
   post 'auth/send_sms'
 
   post 'auth/verify_code'
