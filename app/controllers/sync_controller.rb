@@ -3,6 +3,9 @@ class SyncController < ApplicationController
 
   def sync
     @current_user.update! params.require(:user).permit(:name) if params[:user].present?
+
+     #if params[:contacts].present?
+
     render json: { status: 'Success' }, status: :ok
   end
 

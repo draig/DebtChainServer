@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313050116) do
+ActiveRecord::Schema.define(version: 20180313171642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "internal_id"
+    t.string "phones"
+    t.string "name"
+    t.bigint "friend_id"
+    t.bigint "mapped_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_contacts_on_friend_id"
+    t.index ["mapped_id"], name: "index_contacts_on_mapped_id"
+  end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
