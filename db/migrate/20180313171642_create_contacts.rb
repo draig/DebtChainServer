@@ -5,8 +5,8 @@ class CreateContacts < ActiveRecord::Migration[5.1]
       t.string :phones
       t.string :name
 
-      t.references :friend
-      t.references :mapped
+      t.references :friend, type: :uuid, references: :users
+      t.references :mapped, type: :uuid, references: :users
 
       t.timestamps
     end

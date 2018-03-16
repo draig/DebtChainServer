@@ -3,10 +3,10 @@ class SyncController < ApplicationController
 
   def sync
     @current_user.update! params.require(:user).permit(:name) if params[:user].present?
+    syncback = { status: 'Success' }
+    syncback[:contacts] = ContactsSync.sync params.require(:contacts), @current_user if params[:contacts].present?
 
-     #if params[:contacts].present?
-
-    render json: { status: 'Success' }, status: :ok
+    render json: syncback, status: :ok
   end
 
   private

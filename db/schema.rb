@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20180313171642) do
     t.string "internal_id"
     t.string "phones"
     t.string "name"
-    t.bigint "friend_id"
-    t.bigint "mapped_id"
+    t.uuid "friend_id"
+    t.uuid "mapped_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["friend_id"], name: "index_contacts_on_friend_id"
