@@ -1,14 +1,13 @@
-#require_relative 'debt_sync'
 require 'test_helper'
 
 class ContactSyncTest < ActiveSupport::TestCase
   def setup
     @current_user = User.create! name: 'John Doe', phone: '+0000001'
-    @contact_one = { contact_id: '4cdab6c0-fda7-4979-a668-29186c0dbe0e',
-                     name: 'Tom Cruise', phones: '+0000002' }
+    @contact_one = {contact_id: '4cdab6c0-fda7-4979-a668-29186c0dbe0e',
+                    name: 'Tom Cruise', phones: '+0000002'}
     @user_one = User.new name: 'Tomas Cruise', phone: '+0000002'
-    @contact_two = { contact_id: 'e6e53cd4-1c06-4f53-b65c-bce49ec1cb2a',
-                    name: 'Leonardo DiCaprio', phones: '+0000003' }
+    @contact_two = {contact_id: 'e6e53cd4-1c06-4f53-b65c-bce49ec1cb2a',
+                    name: 'Leonardo DiCaprio', phones: '+0000003'}
   end
 
   test 'create new contact' do

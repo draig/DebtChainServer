@@ -5,8 +5,7 @@ class DebtSync
     debts.each do |debt|
       sync_back << sync_debt(debt, user)
     end
-
-    sync_back
+    sync_back.reject &:nil?
   end
 
   private
