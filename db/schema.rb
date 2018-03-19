@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180317111020) do
+ActiveRecord::Schema.define(version: 20180319182742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20180317111020) do
     t.uuid "mapped_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "sync", default: false
     t.index ["friend_id"], name: "index_contacts_on_friend_id"
     t.index ["mapped_id"], name: "index_contacts_on_mapped_id"
   end
@@ -41,8 +42,12 @@ ActiveRecord::Schema.define(version: 20180317111020) do
   create_table "subscribes", force: :cascade do |t|
     t.boolean "active"
     t.boolean "sync"
+    t.bigint "user_id"
+    t.bigint "debt_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["debt_id"], name: "index_subscribes_on_debt_id"
+    t.index ["user_id"], name: "index_subscribes_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

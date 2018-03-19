@@ -2,6 +2,10 @@ class User < ApplicationRecord
   has_many :subscribes
   has_many :debts, through: :subscribes
 
+  after_create do |user|
+
+  end
+
   def self.auth(token)
     User.find(JsonWebToken.decode(token)[:user_id])
   end

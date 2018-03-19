@@ -8,6 +8,13 @@ class ContactsSync
     sync_back.reject &:nil?
   end
 
+  def self.sync_with_new_user(user)
+    relevance = Contact.where('phones LIKE ?', "%#{Regexp.quote user.phone}%")
+    relevance.reject(&:phones.split(',').find(user.phone).nil?).each do |contact|
+      contact.update! mapped_id: user.id, sync: false
+    end
+  end
+
   private
 
   def self.sync_contact(contact, friend)
