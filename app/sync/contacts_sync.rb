@@ -5,7 +5,7 @@ class ContactsSync
     contacts.each do |contact|
       sync_back << sync_contact(contact, friend)
     end
-    sync_back
+    sync_back.reject &:nil?
   end
 
   private
