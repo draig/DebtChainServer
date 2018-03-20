@@ -4,7 +4,7 @@ class CreateSubscribes < ActiveRecord::Migration[5.1]
       t.boolean :active, default: true
       t.boolean :sync, default: true
 
-      t.belongs_to :user, index: true
+      t.belongs_to :user, type: :uuid, index: true
       t.belongs_to :debt, index: true
       t.timestamps
     end

@@ -12,23 +12,25 @@ class DebtSync
     contacts.each do |contact|
       relevance = Debt.where('party LIKE ?', "%#{contacts.internal_id}%")
       relevance.reject(&:party.split(',').find(contact.internal_id).nil?).each do |debt|
-        update_user_in_debt debt, contact, user
+        #update_user_in_debt debt, contact, user
+        debt.update_user_in_party contact.internal_id, user.id
       end
     end
   end
 
   private
 
-  def self.update_user_in_debt(debt, contact, user)
-    new_party = (debt.party.split(',') - [contact.internal_id] + user.id).join ','
-    debt.update! party: new_party
-    update_debt_subscribes debt
-    Subscribe.create! user_id: user.id, debt_id: debt.id
-  end
+  # def self.update_user_in_debt(debt, contact, user)
+    # debt.update_party
+    # new_party = (debt.party.split(',') - [contact.internal_id] + user.id).join ','
+    # debt.update! party: new_party
+    # update_debt_subscribes debt
+    # Subscribe.create! user_id: user.id, debt_id: debt.id
+  # end
 
-  def self.update_debt_subscribes(debt)
-    Subscribe.find_by(debt_id: debt.id, active: true).update(sync: false)
-  end
+  # def self.update_debt_subscribes(debt)
+  #   Subscribe.find_by(debt_id: debt.id, active: true).update(sync: false)
+  # end
 
   def self.sync_debt(debt, user)
     if debt[:id] =~ /^local/
@@ -45,29 +47,30 @@ class DebtSync
 
   def self.update_debt(debt, user)
     existed_debt = Debt.find debt[:id]
-    if permission? existed_debt.party, user
-      sync_party existed_debt, debt
-      existed_debt.update! title: debt[:title], currency: debt[:currency]
-      #ToDo: update only for other users
+    if existed_debt.can_edit? user
+      #sync_party existed_debt, debt
+      update_party debt.party
+      #existed_debt.update! title: debt[:title], currency: debt[:currency]
+      update_with_subscribes! debt, user
     end
   end
 
-  def self.permission?(party, user)
-    party.find_index(user.id).nil?
-  end
+  # def self.permission?(party, user)
+  #   party.find_index(user.id).nil?
+  # end
 
-  def self.sync_party(existed_debt, debt)
-    new_party = debt.party.split(',') - existed_debt.party.split(',')
-    add_new_party new_party, existed_debt unless new_party.empty?
-  end
+  # def self.sync_party(existed_debt, debt)
+  #   new_party = debt.party.split(',') - existed_debt.party.split(',')
+  #   add_new_party new_party, existed_debt unless new_party.empty?
+  # end
 
-  def add_new_party(new_party, debt)
-    new_party_users = new_party.reject do |id|
-      id =~ /^local/
-    end
-    new_party_users.each do |party_user|
-      Subscribe.create! debt_id: debt.id, user_id: party_user.id, sync: false
-    end
-    debt.party << ',' << new_party.join(',')
-  end
+  # def add_new_party(new_party, debt)
+  #   new_party_users = new_party.reject do |id|
+  #     id =~ /^local/
+  #   end
+  #   new_party_users.each do |party_user|
+  #     Subscribe.create! debt_id: debt.id, user_id: party_user.id, sync: false
+  #   end
+  #   debt.party << ',' << new_party.join(',')
+  # end
 end

@@ -14,6 +14,14 @@ class DebtSyncTest < ActiveSupport::TestCase
     assert_debt Debt.first, @debt_one
   end
 
+  test 'create new debt with one contact' do
+    @debt_one[:party] << ',local-001'
+    sync_back = DebtSync.sync([@debt_one], @current_user)
+    assert_not_empty sync_back
+    assert_equal Debt.all.size, 1
+    assert_debt Debt.first, @debt_one
+  end
+
   private
 
   def assert_debt(debt, hash)

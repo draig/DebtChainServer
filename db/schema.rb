@@ -40,9 +40,9 @@ ActiveRecord::Schema.define(version: 20180319182742) do
   end
 
   create_table "subscribes", force: :cascade do |t|
-    t.boolean "active"
-    t.boolean "sync"
-    t.bigint "user_id"
+    t.boolean "active", default: true
+    t.boolean "sync", default: true
+    t.uuid "user_id"
     t.bigint "debt_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
