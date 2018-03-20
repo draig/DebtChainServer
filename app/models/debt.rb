@@ -5,12 +5,14 @@ class Debt < ApplicationRecord
   has_many :users, through: :subscribes
 
   after_create do |debt|
-    Subscribe.create! debt_id: debt.id, user_id: debt.creator_id
+    debt.split_party.each do |user_id|
+      Subscribe.create! debt_id: id, user_id: user_id, sync: user_id == creator_id unless user_id =~ /^local/
+    end
   end
 
-  after_update do |debt|
-    Subscribe.find_by(debt_id: debt.id, active: true).update! sync: false
-  end
+  # after_update do |debt|
+  #   Subscribe.find_by(debt_id: debt.id, active: true).update! sync: false
+  # end
 
   def update_user_in_party(contact_id, user_id)
     new_party = (split_party - [contact_id] + user_id).join ','
@@ -34,7 +36,7 @@ class Debt < ApplicationRecord
   end
 
   def can_edit?(user)
-    party.find_index(user.id).nil?
+    split_party.find_index(user.id).present?
   end
 
   private
@@ -48,7 +50,7 @@ class Debt < ApplicationRecord
   end
 
   def update_subscribes(user_id = nil)
-    Subscribe.find_by(debt_id: id, active: true).not(user_id: user_id).update(sync: false)
+    Subscribe.where(debt_id: id, active: true).where.not(user_id: user_id).update(sync: false)
   end
 
   def create_subscribes(user_ids)
