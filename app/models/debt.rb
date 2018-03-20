@@ -10,10 +10,6 @@ class Debt < ApplicationRecord
     end
   end
 
-  # after_update do |debt|
-  #   Subscribe.find_by(debt_id: debt.id, active: true).update! sync: false
-  # end
-
   def update_user_in_party(contact_id, user_id)
     new_party = (split_party - [contact_id] + user_id).join ','
     update! party: new_party
