@@ -18,6 +18,13 @@ class DebtSync
     end
   end
 
+  def self.update_debt_hash(debts_hash, contacts_syncback)
+    debts_hash.each do |debt_hash|
+      debt_hash[:party].re
+      #'jasd-asdasd-asd-asd-asdas,local-sdasd-as-dasd-asd-asd-asda,local-sadas-sad-asd-as-sda'.gsub(/(^|,)jasd-asdasd-asd-asd-asdas(,|$)/, '12345')
+    end
+  end
+
   private
 
   def self.sync_debt(debt_hash, user)

@@ -27,7 +27,7 @@ class ContactsSync
   end
 
   def self.to_user(contact, user)
-    contact.merge(app_installed: true, contact_id: user.id, name: user.name)
+    contact.merge(app_installed: true, contact_id: user.id, name: user.name, local_id: contact.contact_id)
   end
 
   def self.sync_existed_contact(contact, existed_contact)

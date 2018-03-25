@@ -1,0 +1,3 @@
+class DefaultAvatart < ApplicationRecord
+
+end

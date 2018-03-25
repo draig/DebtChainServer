@@ -2,8 +2,8 @@ class User < ApplicationRecord
   has_many :subscribes
   has_many :debts, through: :subscribes
 
-  after_create do |user|
-
+  before_create do |user|
+    user.ava = DefaultAvatart.all.sample.url
   end
 
   def self.auth(token)
@@ -11,7 +11,7 @@ class User < ApplicationRecord
   end
 
   def dto
-    { id: id, name: name, phone: phone }
+    { id: id, name: name, phone: phone, ava: ava }
   end
 
   def self.find_by_phones(phones)
